@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lecturer Panel - Document Management System">
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Lecturer Portal">
+  <meta name="msapplication-config" content="browserconfig.xml">
+  <meta name="msapplication-TileColor" content="#007bff">
+  <meta name="msapplication-TileImage" content="icons/mstile-150x150.png">
+  <title>Lecturer Dashboard</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="Logo2.jpg">
+  <link rel="stylesheet" href="lecturer.css">
+  <link rel="stylesheet" href="folder.css">
+  <link rel="stylesheet" href="notifications.css">
+  <link rel="stylesheet" href="assignments.css">
+  <link rel="stylesheet" href="documents.css">
+  <link rel="stylesheet" href="shared-files.css">
+  <link rel="stylesheet" href="upload-modal.css">
+  <link rel="stylesheet" href="file-share.css">
+  <link rel="stylesheet" href="delete-modal.css">
+  <link rel="stylesheet" href="project-year.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="Logo2.jpg" as="image">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Your existing navigation remains exactly the same -->
+    <nav>
+      <div class="logo-container">
+        <img src="Logo2.jpg" alt="Lecturer Portal Logo" class="logo">
+        <h1 class="heading">LECTURER</h1>
+      </div>
+      
+      <div class="nav-controls">
+        <!-- Navigation controls removed as requested -->
+      </div>
+      
+      <ul id="main-nav">
+        <li><a href="#documents" class="active"><i class="fas fa-folder"></i> Documents</a></li>
+        <li><a href="#shared-files"><i class="fas fa-share-alt"></i> Shared Files</a></li>
+        <li><a href="#upload-assignments"><i class="fas fa-upload"></i> Assignments</a></li>
+        <li><a href="#notifications"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="#final-year-projects"><i class="fas fa-project-diagram"></i> Final Year Projects</a></li>
+        <li><a href="#profile"><i class="fas fa-user"></i> Profile</a></li>
+        <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+      
+      <div class="hamburger-menu" id="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+    
+    <main>
+      <section id="shared-files">
+        <h2>Shared Files</h2>
+        
+        <!-- Search and filter controls -->
+        <div class="shared-files-controls">
+          <div class="search-filter-container">
+            <form id="search-shared-files-form">
+              <div class="form-group">
+                <label for="shared-file-search">Search Files:</label>
+                <input type="text" id="shared-file-search" placeholder="Search by title or filename...">
+              </div>
+              
+              <div class="form-group">
+                <label for="shared-file-status">Filter by Status:</label>
+                <select id="shared-file-status">
+                  <option value="all">All Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="shared-file-date">Filter by Date:</label>
+                <input type="date" id="shared-file-date">
+              </div>
+              
+              <button type="submit" class="submit-btn">
+                <i class="fas fa-search"></i> Search
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Shared files grid -->
+        <div class="shared-files-grid" id="shared-files-grid">
+          <!-- Files will be dynamically added here -->
+        </div>
+
+        <!-- Pagination controls -->
+        <div class="pagination-controls">
+          <button id="prev-page-shared" class="pagination-btn" disabled>
+            <i class="fas fa-chevron-left"></i> Previous
+          </button>
+          <span class="pagination-info">
+            Page <span id="current-page-shared">1</span> of <span id="total-pages-shared">1</span>
+          </span>
+          <button id="next-page-shared" class="pagination-btn" disabled>
+            Next <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- Loading state -->
+        <div id="shared-files-loading" class="loading-state">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Loading shared files...</p>
+        </div>
+
+        <!-- Empty state -->
+        <div id="shared-files-empty" class="empty-state hidden">
+          <i class="fas fa-share-alt"></i>
+          <p>No shared files found</p>
+        </div>
+
+        <!-- Error state -->
+        <div id="shared-files-error" class="error-state hidden">
+          <i class="fas fa-exclamation-circle"></i>
+          <p>Failed to load shared files</p>
+          <button class="retry-btn" id="retry-shared-files">
+            <i class="fas fa-sync"></i> Retry
+          </button>
+        </div>
+      </section>
+
+      <section id="documents">
+        <h2>Documents</h2>   
+        
+        <!-- Your existing search and filter section -->
+        <div class="documents-controls">
+          <div class="search-filter-container">
+            <form id="search-documents-form">
+              <div class="form-group">
+                <label for="document-search">Search Documents:</label>
+                <input type="text" id="document-search" placeholder="Enter document name...">
+              </div>
+              
+              <div class="form-group">
+                <label for="document-type">Filter by Type:</label>
+                <select id="document-type">
+                  <option value="all">All Types</option>
+                  <option value="pdf">PDF</option>
+                  <option value="doc">Word</option>
+                  <option value="ppt">PowerPoint</option>
+                  <option value="folder">Folders</option>
+                </select>
+              </div> 
+              
+              <div class="form-group">
+                <label for="document-date">Filter by Date:</label>
+                <input type="date" id="document-date">
+              </div>
+              
+              <button type="submit" class="submit-btn">
+                <i class="fas fa-search"></i> Search
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="create-folder-container">
+          <button id="create-folder-btn" class="submit-btn">Create New Folder</button>
+        </div>
+      
+        <div class="folders-list" id="folders-list">
+          <!-- Folders will be dynamically added here with actions -->
+        </div>
+      
+        <!-- Your existing Create Folder Modal -->
+        <div id="create-folder-modal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Create New Folder</h3>
+            <form id="create-folder-form">
+              <label for="folder-name">Folder Name:</label>
+              <input type="text" id="folder-name" name="folder-name" placeholder="Enter folder name..." required>
+              <button type="submit" class="submit-btn">Create Folder</button>
+            </form>
+          </div>
+        </div>
+      
+        <!-- Your existing Folder Content Modal -->
+        <div id="folder-content-modal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="folder-content-title"></h3>
+      
+            <div class="files-list" id="files-list">
+              <!-- Files will be dynamically added here with actions -->
+            </div>
+      
+            <form id="create-file-form">
+              <label for="file-name">File Name:</label>
+              <input type="text" id="file-name" name="file-name" placeholder="Enter file name..." required>
+              
+              <label for="file-upload">Upload File:</label>
+              <input type="file" id="file-upload" name="file-upload" required>
+              
+              <button type="submit" class="submit-btn">Create File</button>
+            </form>
+          </div>
+        </div>
+      
+        <!-- Your existing File Viewer Modal -->
+        <div id="file-viewer-modal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="file-viewer-content">
+              <!-- File content will be displayed here -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Your existing Delete Confirmation Modal -->
+        <div class="delete-modal">
+          <div class="delete-modal-content">
+            <span class="close">&times;</span>
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete <span id="delete-item-name"></span>?</p>
+            <div class="modal-actions">
+              <button id="confirm-delete" class="submit-btn">Delete</button>
+              <button id="cancel-delete" class="submit-btn">Cancel</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Your existing Share Modal -->
+        <div class="share-modal">
+          <div class="share-modal-content">
+            <span class="close">&times;</span>
+            <h3>Share <span id="share-item-name"></span></h3>
+            <form id="share-form">
+              <div class="form-group">
+                <label for="share-email">Email Address</label>
+                <input type="email" id="share-email" placeholder="Enter recipient's email" required>
+              </div>
+              <div class="form-group">
+                <label for="share-message">Message (Optional)</label>
+                <textarea id="share-message" placeholder="Add a personal message"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="share-permission">Permission</label>
+                <select id="share-permission" required>
+                  <option value="view">Can view</option>
+                  <option value="edit">Can edit</option>
+                </select>
+              </div>
+              <button type="submit" class="submit-btn">Send</button>
+            </form>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Rest of your existing sections remain unchanged -->
+  <section id="upload-assignments">
+        <h2>Upload Assignments</h2>
+        
+        <!-- Assignment Controls -->
+        <div class="assignments-controls">
+          <div class="search-filter-container">
+            <div class="form-group">
+              <label for="assignment-search">Search:</label>
+              <input type="text" id="assignment-search" placeholder="Search assignments...">
+            </div>
+            
+            <div class="form-group">
+              <label for="assignment-status">Status:</label>
+              <select id="assignment-status">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="assignment-sort">Sort By:</label>
+              <select id="assignment-sort">
+                <option value="date-desc">Date (Newest)</option>
+                <option value="date-asc">Date (Oldest)</option>
+                <option value="title-asc">Title (A-Z)</option>
+                <option value="title-desc">Title (Z-A)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Create New Assignment</h3>
+          <form id="create-assignment-form">
+            <div class="form-group">
+              <label for="course">Select Course:</label>
+              <select id="assignment-course" name="course" title="Select course for assignment" required>
+                <option value="" disabled selected>Select a course</option>
+                <!-- Courses will be populated dynamically -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="title">Assignment Title:</label>
+              <input type="text" id="title" name="title" placeholder="Enter assignment title" required>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Assignment Description:</label>
+              <textarea id="description" name="description" placeholder="Enter detailed assignment description" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="assignment-file">Assignment File:</label>
+              <input type="file" id="assignment-file" name="assignment-file" required>
+              <small class="file-hint">Upload your assignment document (PDF, DOC, DOCX)</small>
+              <div id="upload-progress" class="upload-progress-bar">
+                <div class="progress-fill"></div>
+                <span class="progress-text">0%</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="due_date">Due Date:</label>
+              <input type="datetime-local" id="due_date" name="due_date" required>
+            </div>
+
+            <button type="submit" class="submit-btn" id="create-assignment-btn">Create Assignment</button>
+          </form>
+          <div id="assignment-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>My Assignments</h3>
+          <div id="assignments-list">
+            <!-- Assignments will be listed here -->
+          </div>
+          <!-- Pagination -->
+          <div class="pagination-controls">
+            <button id="prev-page" class="pagination-btn">Previous</button>
+            <span>Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+            <button id="next-page" class="pagination-btn">Next</button>
+            <span id="total-assignments"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL YEAR PROJECTS SECTION (API-DRIVEN) -->
+      <section id="final-year-projects">
+        <h2>Final Year Projects</h2>
+        <div class="card">
+          <h3>Project Year Management</h3>
+          <form id="create-project-year-form">
+            <div class="form-group">
+              <label for="academic-year">Academic Year: <span class="required">*</span></label>
+              <input 
+                type="text" 
+                id="academic-year" 
+                name="academic_year" 
+                placeholder="e.g., 2024/2025" 
+                pattern="\d{4}/\d{4}"
+                title="Please enter in format: YYYY/YYYY (e.g., 2024/2025)"
+                required
+              >
+              <small class="input-hint">Format: YYYY/YYYY (e.g., 2024/2025)</small>
+              <div class="validation-message"></div>
+            </div>
+            <div class="form-group">
+              <label for="project-department">Department: <span class="required">*</span></label>
+              <div id="department-info" class="department-info">
+                <i class="fas fa-university"></i>
+                <span>Loading department information...</span>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="submit-btn">
+                <i class="fas fa-plus"></i> Create Project Year
+              </button>
+              <div class="form-status"></div>
+            </div>
+          </form>
+          <div id="project-years-list">
+            <!-- Project years will be listed here -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Project Group Management</h3>
+          <form id="create-project-group-form">
+            <div class="form-group">
+              <label for="project-year-select">Project Year:</label>
+              <select id="project-year-select" name="project-year-select" required>
+                <option value="" disabled selected>Select year</option>
+                <!-- Years will be populated dynamically -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="group-topic">Project Topic:</label>
+              <input type="text" id="group-topic" name="group-topic" required placeholder="Enter project topic">
+            </div>
+            <div class="form-group">
+              <label>Group Members (Student IDs):</label>
+              <div id="group-members-container">
+                <input type="text" name="member-id" class="member-id-input" placeholder="Student ID" required>
+              </div>
+              <button type="button" id="add-member-btn" class="submit-btn">Add Member</button>
+            </div>
+            <button type="submit" class="submit-btn">Create Project Group</button>
+          </form>
+          <div id="project-groups-list">
+            <!-- Project groups will be listed here -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Project Grading</h3>
+          <form id="grade-project-form">
+            <div class="form-group">
+              <label for="group-select">Project Group:</label>
+              <select id="group-select" name="group-select" required>
+                <option value="" disabled selected>Select group</option>
+                <!-- Groups will be populated dynamically -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="grading-stage">Stage:</label>
+              <select id="grading-stage" name="grading-stage" required>
+                <option value="Proposal">Proposal</option>
+                <option value="Progress">Progress</option>
+                <option value="Defense">Defense</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="score">Score (0-100):</label>
+              <input type="number" id="score" name="score" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+              <label for="comments">Comments:</label>
+              <textarea id="comments" name="comments" rows="3" placeholder="Enter feedback"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Grade</button>
+          </form>
+          <div id="grades-list">
+            <!-- Grades for selected group will be shown here -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Final Project Grade</h3>
+          <form id="final-grade-form">
+            <div class="form-group">
+              <label for="final-group-select">Project Group:</label>
+              <select id="final-group-select" name="final-group-select" required>
+                <option value="" disabled selected>Select group</option>
+                <!-- Groups will be populated dynamically -->
+              </select>
+            </div>
+            <button type="submit" class="submit-btn">View Final Grade</button>
+          </form>
+          <div id="final-grade-result">
+            <!-- Final grade will be displayed here -->
+          </div>
+        </div>
+      </section>
+      
+      <section id="notifications">
+        <h2>Notifications</h2>
+        
+        <div class="card">
+          <h3>Send New Notification</h3>
+          <form id="send-notification-form">
+            <div class="form-group">
+              <label for="notification-type">Send To: *</label>
+              <select id="notification-type" name="notification-type" required>
+                <option value="" disabled selected>Choose recipient type</option>
+                <option value="course">All students in course</option>
+                <option value="individual">Individual student(s)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="notification-course">Select Course: *</label>
+              <select id="notification-course" name="notification-course" required>
+                <option value="" disabled selected>Loading courses...</option>
+              </select>
+            </div>
+
+            <div class="form-group students-selection-hidden" id="students-selection">
+              <label for="notification-students">Select Students: *</label>
+              <select id="notification-students" name="notification-students" multiple>
+                <option value="" disabled>Select course first</option>
+              </select>
+              <small>Hold Ctrl/Cmd to select multiple students</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="notification-title">Notification Title: *</label>
+              <input type="text" id="notification-title" name="notification-title" required placeholder="e.g., Assignment Reminder, Exam Notice">
+            </div>
+            
+            <div class="form-group">
+              <label for="notification-message">Message: *</label>
+              <textarea id="notification-message" name="notification-message" rows="4" required placeholder="Enter your notification message here..."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-paper-plane"></i> Send Notification
+            </button>
+          </form>
+          <div id="notification-status"></div>
+        </div>
+        
+        <div class="card">
+          <h3>Received Notifications <span id="unread-count" class="unread-badge">0</span></h3>
+          <div class="notification-controls">
+            <div class="notification-filters">
+              <select id="filter-notifications" title="Filter notifications by type">
+                <option value="all">All Notifications</option>
+                <option value="unread">Unread Only</option>
+                <option value="read">Read Only</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+              <button id="mark-all-read-btn" class="btn-secondary">
+                <i class="fas fa-check-double"></i> Mark All Read
+              </button>
+              <button id="refresh-notifications-btn" class="btn-secondary">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+          </div>
+          
+          <div id="notifications-loading" class="loading-state">
+            <p>Loading notifications...</p>
+          </div>
+          
+          <div id="notifications-container">
+            <ul id="received-notifications-list">
+              <!-- Notifications will be added here dynamically -->
+            </ul>
+            
+            <div id="notifications-pagination" class="pagination-controls">
+              <button id="prev-page-btn" class="pagination-btn" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+              </button>
+              <span id="page-info">Page 1 of 1</span>
+              <button id="next-page-btn" class="pagination-btn" disabled>
+                Next <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div id="no-notifications" class="empty-state profile-hidden">
+            <i class="fas fa-bell-slash"></i>
+            <p>No notifications found</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile">
+        <h2>My Profile</h2>
+        
+        <div class="card">
+          <h3>Profile Information</h3>
+          <div id="profile-loading">
+            <p>Loading profile information...</p>
+          </div>
+          <div id="profile-content" class="profile-hidden">
+            <div class="profile-field">
+              <label>Name:</label>
+              <span id="profile-name">-</span>
+            </div>
+            <div class="profile-field">
+              <label>Email:</label>
+              <span id="profile-email">-</span>
+            </div>
+            <div class="profile-field">
+              <label>Department:</label>
+              <span id="profile-department">-</span>
+            </div>
+            <div class="profile-field">
+              <label>Role:</label>
+              <span id="profile-role">-</span>
+            </div>
+            <button id="refresh-profile-btn" class="btn-secondary">
+              <i class="fas fa-sync-alt"></i> Refresh Profile
+            </button>
+          </div>
+          <div id="profile-error" class="profile-hidden">
+            <p class="error-message">Failed to load profile information.</p>
+            <button id="retry-profile-btn" class="btn-secondary">
+              <i class="fas fa-retry"></i> Retry
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Change Password</h3>
+          <form id="change-password-form">
+            <div class="form-group">
+              <label for="current-password">Current Password: *</label>
+              <input type="password" id="current-password" name="current-password" required placeholder="Enter your current password">
+            </div>
+            
+            <div class="form-group">
+              <label for="new-password">New Password: *</label>
+              <input type="password" id="new-password" name="new-password" required placeholder="Enter new password" minlength="6">
+            </div>
+            
+            <div class="form-group">
+              <label for="confirm-password">Confirm New Password: *</label>
+              <input type="password" id="confirm-password" name="confirm-password" required placeholder="Confirm new password" minlength="6">
+            </div>
+            
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-key"></i> Change Password
+            </button>
+          </form>
+          <div id="password-status"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Core application scripts -->
+  <script src="lecturer.js" defer></script>
+  <script src="assignments.js" defer></script>
+  <script src="folders.js" defer></script>
+  <script src="documents.js" defer></script>
+  <script src="shared-files.js" defer></script>
+  <script src="upload-document.js" defer></script>
+  <script src="lecturer-upload.js" defer></script>
+  
+  <!-- Third-party libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" defer></script>
+  
+  <!-- PWA Support -->
+  <script src="pwa.js" defer></script>
+</body>
+</html>

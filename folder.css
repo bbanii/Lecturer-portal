@@ -1,0 +1,132 @@
+.folders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.folder-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 
+              0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.folder-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08), 
+              0 4px 8px rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.folder-icon {
+  font-size: 2.75em;
+  color: #2563eb;
+  text-align: center;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.folder-card:hover .folder-icon {
+  color: #1d4ed8;
+}
+
+.folder-info {
+  margin: 12px 0;
+}
+
+.folder-info h4 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #1f2937;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.folder-meta {
+  font-size: 0.875em;
+  color: #6b7280;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folder-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.folder-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.folder-actions .btn-primary {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.folder-actions .btn-primary:hover {
+  background-color: #357abd;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 3em;
+  margin-bottom: 15px;
+  color: #ddd;
+}
+
+.error-state {
+  text-align: center;
+  padding: 40px;
+  color: #d9534f;
+}
+
+.error-state i {
+  font-size: 3em;
+  margin-bottom: 15px;
+}
+
+.retry-btn {
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.retry-btn:hover {
+  background: #c9302c;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.loading-state i {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #4a90e2;
+}

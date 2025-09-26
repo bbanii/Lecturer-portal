@@ -1,0 +1,36 @@
+{
+  "name": "Lecturer Portal",
+  "short_name": "LecturerApp",
+  "description": "Lecturer Portal for Document Management System",
+  "start_url": "./lecturer.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007bff",
+  "icons": [
+    {
+      "src": "Logo2.jpg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "orientation": "any",
+  "scope": "/",
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Documents",
+      "short_name": "Docs",
+      "description": "View your documents",
+      "url": "/lecturer.html#documents",
+      "icons": [{ "src": "Logo2.jpg", "sizes": "any" }]
+    },
+    {
+      "name": "Assignments",
+      "short_name": "Assignments",
+      "description": "Manage assignments",
+      "url": "/lecturer.html#upload-assignments",
+      "icons": [{ "src": "Logo2.jpg", "sizes": "any" }]
+    }
+  ]
+}
